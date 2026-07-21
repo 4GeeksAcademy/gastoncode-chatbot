@@ -1,65 +1,142 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { FormEvent, useEffect, useRef, useState } from "react";
+import { Composer } from "@/components/chat/Composer";
+import { MessageList } from "@/components/chat/MessageList";
+import { Sidebar } from "@/components/chat/Sidebar";
+import { TopBar } from "@/components/chat/TopBar";
+import { ChatApiResponse, ChatMessage, TokenUsage } from "@/components/chat/types";
+import { UsagePanel } from "@/components/chat/UsagePanel";
+
+const STORAGE_KEY = "gastoncode:chat:messages";
+
+const initialMessages: ChatMessage[] = [
+  {
+    id: "welcome",
+    role: "assistant",
+    content: "Hola, soy tu asistente. ¿Qué quieres construir hoy?",
+    createdAt: Date.now(),
+  },
+];
+
+function createId() {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) return crypto.randomUUID();
+  return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
+
+export default function Page() {
+  const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
+  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [modelName, setModelName] = useState("fallback-local");
+  const [usage, setUsage] = useState<TokenUsage | null>(null);
+  const endRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw) as ChatMessage[];
+      if (Array.isArray(parsed) && parsed.length > 0) setMessages(parsed);
+    } catch {
+      // no-op
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+    } catch {
+      // no-op
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    endRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, isLoading]);
+
+  const sendMessage = async (text: string) => {
+    const content = text.trim();
+    if (!content || isLoading) return;
+
+    const userMessage: ChatMessage = {
+      id: createId(),
+      role: "user",
+      content,
+      createdAt: Date.now(),
+    };
+
+    const next = [...messages, userMessage];
+    setMessages(next);
+    setInput("");
+    setIsLoading(true);
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: next.map(({ role, content }) => ({ role, content })) }),
+      });
+
+      if (!res.ok) throw new Error("API error");
+
+      const data = (await res.json()) as ChatApiResponse;
+
+      setModelName(data.model || "fallback-local");
+      setUsage(
+        data.usage ?? {
+          promptTokens: 0,
+          completionTokens: 0,
+          totalTokens: 0,
+        }
+      );
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: createId(),
+          role: "assistant",
+          content: data.reply?.trim() || "No recibí contenido de respuesta.",
+          createdAt: Date.now(),
+        },
+      ]);
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: createId(),
+          role: "assistant",
+          content: "Hubo un problema al consultar la IA. Inténtalo de nuevo.",
+          createdAt: Date.now(),
+        },
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await sendMessage(input);
+  };
+
+  const onNewChat = () => {
+    setMessages(initialMessages);
+    setInput("");
+    setIsLoading(false);
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="min-h-screen bg-slate-950 text-slate-100 p-4 md:p-8">
+      <section className="mx-auto grid h-[90vh] max-w-6xl overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/60 shadow-2xl md:grid-cols-[288px_1fr]">
+        <Sidebar onNewChat={onNewChat} onUsePrompt={sendMessage} />
+        <div className="flex min-h-0 flex-col">
+          <TopBar isLoading={isLoading} onNewChat={onNewChat} modelName={modelName} />
+          <UsagePanel usage={usage} />
+          <MessageList messages={messages} isLoading={isLoading} endRef={endRef} />
+          <Composer value={input} isLoading={isLoading} onChange={setInput} onSubmit={onSubmit} />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </section>
+    </main>
   );
 }
