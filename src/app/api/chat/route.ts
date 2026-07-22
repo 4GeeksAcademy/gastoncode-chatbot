@@ -48,21 +48,25 @@ function buildFallbackResponse(userText: string) {
 export async function POST(req: Request) {
   try {
     const body = (await req.json()) as { messages?: InputMessage[] };
-    const messages = Array.isArray(body.messages) ? body.messages : [];
+    const messages = (Array.isArray(body.messages) ? body.messages : [])
+      .filter((m): m is InputMessage => {
+        return (m.role === "user" || m.role === "assistant") && typeof m.content === "string";
+      })
+      .map((m) => ({ role: m.role, content: m.content }));
     const userText = [...messages].reverse().find((m) => m.role === "user")?.content?.trim() || "";
 
-    const apiKey = process.env.OPENAI_API_KEY;
+    const apiKey = process.env.GROQ_API_KEY;
     if (!apiKey) return NextResponse.json(buildFallbackResponse(userText));
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: process.env.OPENAI_MODEL ?? "gpt-4o-mini",
-        messages: messages.map((m) => ({ role: m.role, content: m.content })),
+        model: process.env.GROQ_MODEL ?? "llama-3.1-8b-instant",
+        messages,
         temperature: 0.7,
       }),
     });
@@ -87,7 +91,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       reply,
-      model: data.model ?? (process.env.OPENAI_MODEL ?? "gpt-4o-mini"),
+      model: data.model ?? (process.env.GROQ_MODEL ?? "llama-3.1-8b-instant"),
       usage: {
         promptTokens,
         completionTokens,

@@ -18,8 +18,9 @@ export function MessageList({ messages, isLoading, endRef }: MessageListProps) {
 
         {isLoading && (
           <div className="flex justify-start">
-            <div className="rounded-2xl bg-slate-800 border border-slate-700 px-4 py-3 text-sm text-slate-300">
-              Escribiendo respuesta...
+            <div className="inline-flex items-center gap-2 rounded-2xl bg-slate-800 border border-slate-700 px-4 py-3 text-sm text-slate-300">
+              <span className="h-2 w-2 animate-pulse rounded-full bg-blue-400" />
+              <span>Pensando...</span>
             </div>
           </div>
         )}

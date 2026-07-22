@@ -1,6 +1,13 @@
+import { TokenUsage } from "./types";
+import { UsagePanel } from "./UsagePanel";
+
 type SidebarProps = {
   onNewChat: () => void;
   onUsePrompt: (prompt: string) => void;
+  usage: TokenUsage | null;
+  sessionUsage: TokenUsage;
+  responseTimeMs: number | null;
+  modelName: string;
 };
 
 const quickPrompts = [
@@ -9,9 +16,9 @@ const quickPrompts = [
   "Dame un plan de estudio de React de 30 días",
 ];
 
-export function Sidebar({ onNewChat, onUsePrompt }: SidebarProps) {
+export function Sidebar({ onNewChat, onUsePrompt, usage, sessionUsage, responseTimeMs, modelName }: SidebarProps) {
   return (
-    <aside className="hidden md:flex md:w-72 md:flex-col border-r border-slate-800 bg-slate-950/80">
+    <aside className="hidden md:flex md:w-80 md:flex-col overflow-y-auto border-r border-slate-800 bg-slate-950/80">
       <div className="p-5 border-b border-slate-800">
         <h1 className="text-lg font-semibold text-white">GastonCode Chat</h1>
         <p className="text-xs text-slate-400 mt-1">AI Assistant</p>
@@ -39,6 +46,15 @@ export function Sidebar({ onNewChat, onUsePrompt }: SidebarProps) {
             </button>
           ))}
         </div>
+      </div>
+
+      <div className="px-4 pb-4">
+        <UsagePanel
+          usage={usage}
+          sessionUsage={sessionUsage}
+          responseTimeMs={responseTimeMs}
+          modelName={modelName}
+        />
       </div>
     </aside>
   );
