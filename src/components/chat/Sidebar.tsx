@@ -11,17 +11,17 @@ type SidebarProps = {
 };
 
 const quickPrompts = [
-  "Ayúdame a crear un landing con Next.js",
-  "Explícame este error de TypeScript",
-  "Dame un plan de estudio de React de 30 días",
+  "¿Cuáles son los horarios de los turnos del liceo?",
+  "¿Cómo justifico una inasistencia?",
+  "¿Cuánto cuesta la cuota mensual?",
 ];
 
 export function Sidebar({ onNewChat, onUsePrompt, usage, sessionUsage, responseTimeMs, modelName }: SidebarProps) {
   return (
     <aside className="hidden md:flex md:w-80 md:flex-col overflow-y-auto border-r border-slate-800 bg-slate-950/80">
       <div className="p-5 border-b border-slate-800">
-        <h1 className="text-lg font-semibold text-white">GastonCode Chat</h1>
-        <p className="text-xs text-slate-400 mt-1">AI Assistant</p>
+        <h1 className="text-lg font-semibold text-white">Liceo Horizonte Sur</h1>
+        <p className="text-xs text-slate-400 mt-1">Asistente institucional</p>
       </div>
 
       <div className="p-4">

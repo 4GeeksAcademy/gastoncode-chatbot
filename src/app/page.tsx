@@ -42,13 +42,18 @@ export default function Page() {
   const [sessionUsage, setSessionUsage] = useState<TokenUsage>(emptyUsage);
   const [responseTimeMs, setResponseTimeMs] = useState<number | null>(null);
   const endRef = useRef<HTMLDivElement | null>(null);
+  const skipPersistMessagesRef = useRef(true);
+  const skipPersistSessionUsageRef = useRef(true);
 
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return;
       const parsed = JSON.parse(raw) as ChatMessage[];
-      if (Array.isArray(parsed) && parsed.length > 0) setMessages(parsed);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setMessages(parsed);
+      }
     } catch {
       // no-op
     }
@@ -69,6 +74,7 @@ export default function Page() {
         Number.isFinite(completionTokens) &&
         Number.isFinite(totalTokens)
       ) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSessionUsage({
           promptTokens,
           completionTokens,
@@ -81,6 +87,11 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
+    if (skipPersistMessagesRef.current) {
+      skipPersistMessagesRef.current = false;
+      return;
+    }
+
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
     } catch {
@@ -89,6 +100,11 @@ export default function Page() {
   }, [messages]);
 
   useEffect(() => {
+    if (skipPersistSessionUsageRef.current) {
+      skipPersistSessionUsageRef.current = false;
+      return;
+    }
+
     try {
       localStorage.setItem(SESSION_USAGE_STORAGE_KEY, JSON.stringify(sessionUsage));
     } catch {

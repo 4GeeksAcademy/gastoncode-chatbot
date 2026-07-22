@@ -1,0 +1,115 @@
+# Base de conocimiento - Liceo Horizonte Sur (datos mock)
+
+Institucion:
+- Nombre: Liceo Horizonte Sur
+- Tipo: Liceo de educacion media (ciclo basico y bachillerato)
+- Gestion: Privada con subvencion parcial
+
+Direccion y contacto:
+- Direccion: Av. Libertad 2450, Barrio Centro, Montevideo, Uruguay
+- Referencia: A 2 cuadras de Plaza Rivera
+- Telefono fijo: +598 2 456 78 90
+- WhatsApp institucional: +598 98 123 456
+- Correo general: informes@liceohorizontesur.edu.uy
+- Correo adscripciones: adscripcion@liceohorizontesur.edu.uy
+- Correo secretaria: secretaria@liceohorizontesur.edu.uy
+- Sitio web: www.liceohorizontesur.edu.uy
+
+Horarios de atencion:
+- Secretaria administrativa: lunes a viernes de 08:00 a 17:30
+- Adscripcion: lunes a viernes de 07:30 a 18:30
+- Direccion: lunes, miercoles y viernes de 09:00 a 12:00 (con agenda previa)
+
+Turnos y horarios de clase:
+- Turno matutino: 07:45 a 12:15
+- Turno intermedio: 12:30 a 16:45
+- Turno vespertino: 17:00 a 21:10
+- Duracion por modulo: 45 minutos
+- Recreos: 10 minutos entre modulos, recreo largo de 20 minutos a mitad del turno
+
+Niveles y orientaciones:
+- Ciclo basico: 1ro, 2do y 3ro
+- Bachillerato: 4to, 5to y 6to
+- Orientaciones disponibles:
+	* Cientifico
+	* Humanistico
+	* Artistico
+	* Economia y Administracion
+
+Autoridades:
+- Directora: Prof. Ana Lucia Pereira
+- Subdirector academico: Prof. Diego Varela
+- Secretaria general: Sra. Mariana Estevez
+- Coordinadora de convivencia: Lic. Paula Ferrer
+
+Docentes (muestra):
+- Matematica: Prof. Martin Sosa
+- Literatura: Prof. Sofia Rinaldi
+- Historia: Prof. Gonzalo Bentancur
+- Biologia: Prof. Carolina Lemos
+- Fisica: Prof. Javier Mendez
+- Ingles: Prof. Camila Rossi
+- Informatica: Prof. Nicolas Acosta
+- Filosofia: Prof. Valentina Nuñez
+
+Canales por tipo de consulta:
+- Inscripciones y pases: secretaria@liceohorizontesur.edu.uy
+- Inasistencias y justificativos: adscripcion@liceohorizontesur.edu.uy
+- Aranceles y facturacion: administracion@liceohorizontesur.edu.uy
+- Convivencia escolar: convivencia@liceohorizontesur.edu.uy
+
+Inscripciones (datos mock):
+- Periodo principal: 1 de noviembre al 20 de diciembre
+- Periodo complementario: 5 de febrero al 25 de febrero
+- Requisitos nuevos ingresos:
+	* Cedula del estudiante y tutor
+	* Pase escolar o constancia de estudios
+	* Carnet de salud vigente
+	* Foto tipo carnet
+
+Cuotas y pagos (datos mock):
+- Cuota mensual ciclo basico: UYU 8.900
+- Cuota mensual bachillerato: UYU 9.700
+- Matricula anual: UYU 6.500
+- Descuento por hermanos: 15% en la cuota del segundo hermano
+- Medio de pago: transferencia, tarjeta de debito, tarjeta de credito y redes de cobranza
+- Vencimiento mensual: dia 10 de cada mes
+
+Normas de asistencia y puntualidad:
+- Tolerancia de llegada: 10 minutos maximo por primera hora
+- Inasistencias: deben justificarse dentro de 48 horas
+- Retiro anticipado: solo con autorizacion de madre/padre/tutor registrado
+
+Uniforme (obligatorio):
+- Superior: remera o buzo institucional azul marino
+- Inferior: pantalon deportivo azul marino o jean liso oscuro
+- Educacion fisica: equipo deportivo institucional y calzado adecuado
+
+Actividades y servicios:
+- Biblioteca: lunes a viernes de 09:00 a 18:00
+- Taller de robotica: martes y jueves de 17:30 a 19:00
+- Club de debate: miercoles de 18:00 a 19:30
+- Apoyo academico en matematica: lunes y miercoles de 16:30 a 17:30
+- Apoyo academico en lengua: martes y jueves de 16:30 a 17:30
+
+Preguntas frecuentes (FAQ):
+- Como justifico una falta?
+	Enviar correo a adscripcion@liceohorizontesur.edu.uy con nombre completo, grupo, fecha y motivo. Adjuntar certificado si corresponde.
+
+- Como solicito pase a otro centro?
+	Debes pedir entrevista en secretaria. Se entrega constancia administrativa en 48 a 72 horas habiles.
+
+- Se puede pagar fuera de fecha?
+	Si, con recargo administrativo del 5% despues del dia 10.
+
+- Tienen becas?
+	Si, hay cupos de beca parcial por situacion socioeconomica y desempeno academico. Postulacion en febrero.
+
+Lineamientos para respuestas del chatbot:
+- Responder siempre en espanol, tono cordial y claro.
+- Priorizar esta base de conocimiento cuando la consulta sea institucional.
+- Si falta informacion, indicar que es un dato no disponible y derivar a secretaria o adscripcion.
+- No inventar nombres, horarios o precios fuera de este documento.
+
+Importante:
+- No debes referir a este documento, solo informar en caso de contar con el dato. La institución/liceo es el que aparece en el apartado Institucion (Liceo Horizonte Sur)
